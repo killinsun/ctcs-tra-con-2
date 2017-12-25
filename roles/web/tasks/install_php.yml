@@ -1,0 +1,10 @@
+---
+
+- name: PHP5のインストール
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - libxml2-devel
+    - php
+    - php-mbstring

@@ -14,5 +14,5 @@ apache_2_2:
   src_filename: httpd-2.2.19.tar.gz
   
   # 設定ファイルパス
-  conf_file: /etc/httpd/conf/httpd.conf
+  conf_file: /usr/local/apache/conf//httpd.conf
 

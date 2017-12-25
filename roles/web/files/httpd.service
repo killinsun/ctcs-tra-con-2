@@ -1,0 +1,12 @@
+[Unit]
+Description=The Apache2.2 HTTP Server
+After=network.target remote-fs.target nss-lookup.target
+
+[Service]
+Type=forking
+ExecStart=/usr/local/apache/bin/apachectl -k start
+ExecReload=/usr/local/apache/bin/apachectl -k graceful
+ExecStop=/usr/local/apache/bin/apachectl -k graceful-stop
+
+[Install]
+WantedBy=multi-user.target

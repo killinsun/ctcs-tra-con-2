@@ -3,4 +3,6 @@
 #- include: install_apr-util.yml
 #- include: install_distcache.yml
 - include: install_httpd_2_2.yml
+- include: install_php.yml
+- include: install_eccube3.yml
 # tasks file for web

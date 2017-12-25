@@ -1,8 +1,10 @@
 [web1]
 #localhost
+10.246.0.140
 
 [web2]
 localhost
+10.246.0.141
 
 
 [db]

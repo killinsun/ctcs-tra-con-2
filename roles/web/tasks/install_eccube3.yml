@@ -1,5 +1,10 @@
 ---
-- name: put EC-CUBE3 on remote
+- name: 必要なパッケージのインストール
+  yum:
+    name: unzip
+    state: present
+
+- name: put EC-CUBE3 
   unarchive: 
     src: "../files/eccube-3.0.14.zip"
     dest: /home/trashMG/
