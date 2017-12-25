@@ -1,0 +1,61 @@
+---
+# build and install httpd_2.2
+
+- name: httpd ソースファイルのビルドに必要なパッケージのインストール
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - gcc
+    - wget
+    - zlib-devel
+    - libselinux-devel
+    - pcre-devel
+    - lua-devel
+    - libxml2-devel
+    - openssl-devel
+    - openssl
+
+- name: httpd のソースファイルをダウンロード
+  get_url:
+    url: "{{ apache_2_2.url }}"
+    dest: "{{ apache_2_2.work_dir }}"
+
+
+- name: httpdアーカイブの解凍
+  shell: tar zxvf "{{ apache_2_2.src_filename }}"
+  args:
+    chdir: "{{ apache_2_2.work_dir }}"
+    creates: "{{ apache_2_2.conf_file }}"
+
+- name: configure実行
+  shell: ./configure --prefix=/usr/local/apache --enable-so --enable-ssl --enable-rewrite --with-included-apr
+  args:
+    chdir: "{{ apache_2_2.work_dir }}/{{ apache_2_2.file_name }}"
+    creates: "{{ apache_2_2.conf_file }}"
+    
+- name: make実行
+  shell: make && make install
+  args:
+    chdir: "{{ apache_2_2.work_dir }}/{{ apache_2_2.file_name }}"
+    creates: "{{ apache_2_2.conf_file }}"
+
+- name: apacheグループの追加
+  group:
+    name: apache
+    state: present
+
+- name: apache実行ユーザの追加
+  user: 
+    name: apache 
+    state: present
+    group: apache
+    shell: /sbin/nologin
+
+- name: ドキュメントルートの配置
+  file:
+    path: /var/www/html
+    owner: apache
+    recurse: yes
+    state: directory
+#- name: 設定ファイルの配置

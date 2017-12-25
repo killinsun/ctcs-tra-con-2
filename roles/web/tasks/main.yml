@@ -1,0 +1,6 @@
+---
+#- include: install_apr.yml
+#- include: install_apr-util.yml
+#- include: install_distcache.yml
+- include: install_httpd_2_2.yml
+# tasks file for web

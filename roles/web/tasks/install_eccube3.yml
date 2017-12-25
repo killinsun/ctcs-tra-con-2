@@ -1,0 +1,28 @@
+---
+- name: put EC-CUBE3 on remote
+  unarchive: 
+    src: "../files/eccube-3.0.14.zip"
+    dest: /home/trashMG/
+
+- name: deploy EC-CUBE3 for /var/www/html/
+  shell: cp -afr /home/trashMG/eccube-3.0.14/* /var/www/
+
+- name: put .htaccess on /var/www
+  copy:
+    src: "../files/htaccess"
+    dest: /var/www/.htaccess
+    owner: apache
+    group: apache
+
+- name: put php.ini on /etc/php.ini
+  copy:
+    src: "../files/php.ini"
+    dest: /etc/php.ini
+
+- name: set permission for /var/ww/html
+  file:
+    dest: /var/www/
+    recurse: yes
+    owner: apache
+    group: apache
+

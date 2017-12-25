@@ -1,0 +1,18 @@
+# webservers Variables
+
+apache_2_2:
+  file_name: httpd-2.2.19
+  # 起動ユーザ
+  user_name: apache
+  # 起動グループ
+  group_name: apache
+  # ソースファイル作業ディレクトリ
+  work_dir: /usr/local/src
+  # ソースファイルダウンロード URL
+  url: https://archive.apache.org/dist/httpd/httpd-2.2.19.tar.gz
+  # ソースファイル名
+  src_filename: httpd-2.2.19.tar.gz
+  
+  # 設定ファイルパス
+  conf_file: /etc/httpd/conf/httpd.conf
+
