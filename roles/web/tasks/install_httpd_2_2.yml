@@ -86,4 +86,4 @@
     dest: /usr/local/apache/bin/apxs
     backup: yes
     regexp: '#!\/replace\/with\/path\/to\/perl\/interpreter -w'
-    line: '#!\/usr\/bin\/perl -w'
+    line: '#!/usr/bin/perl -w'

@@ -1,3 +1,4 @@
 ---
 - include: web1.yml
 - include: web2.yml
+- include: manager.yml
