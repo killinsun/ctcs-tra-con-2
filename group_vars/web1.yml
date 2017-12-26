@@ -16,3 +16,8 @@ apache_2_2:
   # 設定ファイルパス
   conf_file: /usr/local/apache/conf/httpd.conf
 
+php7:
+  file_name: php-7.0.0
+  work_dir: /usr/local/src
+  src_filename: php-7.0.0.tar.gz
+  conf_file: /etc/php.ini

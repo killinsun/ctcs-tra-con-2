@@ -29,7 +29,7 @@
     creates: "{{ apache_2_2.conf_file }}"
 
 - name: configure実行
-  shell: ./configure --prefix=/usr/local/apache --sysconfdir=/etc/httpd/conf --datadir=/var/www/ --enable-so --enable-ssl --enable-rewrite --with-included-apr
+  shell: ./configure --prefix=/usr/local/apache --datadir=/var/www/ --enable-so --enable-ssl --enable-rewrite --with-included-apr --enable-mods-shared=reallyall
   args:
     chdir: "{{ apache_2_2.work_dir }}/{{ apache_2_2.file_name }}"
     creates: "{{ apache_2_2.conf_file }}"
@@ -77,7 +77,13 @@
 - name: 設定ファイルの配置
   copy:
     src: ../files/httpd.conf
-    dest: /etc/httpd/conf/httpd.conf
+    dest: /usr/local/apache/conf/
     owner: apache
     group: apache
 
+- name: apxs インタプリタパス修正
+  lineinfile:
+    dest: /usr/local/apache/bin/apxs
+    backup: yes
+    regexp: '#!\/replace\/with\/path\/to\/perl\/interpreter -w'
+    line: '#!\/usr\/bin\/perl -w'

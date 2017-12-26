@@ -7,10 +7,10 @@
 - name: put EC-CUBE3 
   unarchive: 
     src: "../files/eccube-3.0.14.zip"
-    dest: /home/trashMG/
+    dest: /home/centos/
 
 - name: deploy EC-CUBE3 for /var/www/html/
-  shell: cp -afr /home/trashMG/eccube-3.0.14/* /var/www/
+  shell: cp -afr /home/centos/eccube-3.0.14/* /var/www/
 
 - name: put .htaccess on /var/www
   copy:

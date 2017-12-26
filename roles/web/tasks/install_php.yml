@@ -1,10 +1,48 @@
 ---
+- name: 必要なパッケージのインストール1
+  yum:
+    name: epel-release
+    state: present
 
-- name: PHP5のインストール
+- name: 必要なパッケージのインストール2
   yum:
     name: "{{ item }}"
     state: present
   with_items:
+    - perl
     - libxml2-devel
-    - php
-    - php-mbstring
+    - libpng-devel
+    - libmcrypt-devel
+    - libXpm-devel
+    - freetype-devel
+    - gmp-devel
+    - libmcrypt-devel
+    - aspell-devel
+    - bzip2-devel
+    - curl-devel
+    - libjpeg-devel
+
+
+- name: phpソースファイルをダウンロード
+  copy:
+    src: "../files/{{ php7.src_filename }}"
+    dest: "{{ php7.work_dir }}"
+
+- name: phpアーカイブの解凍
+  shell: tar zxvf "{{ php7.src_filename }}"
+  args:
+    chdir: "{{ php7.work_dir }}"
+    creates: "{{ php7.conf_file }}"
+
+- name: configure実行
+  shell:  ./configure --prefix=/usr/local/php/7.0.0/ --enable-mbstring --enable-zip  --enable-pcntl --enable-ftp --enable-exif --enable-calendar --enable-sysvmsg --enable-sysvsem --enable-sysvshm --enable-wddx --with-curl --with-mcrypt --with-iconv --with-gmp --with-pspell --with-gd --with-jpeg-dir=/usr --with-png-dir=/usr --with-zlib-dir=/usr --with-xpm-dir=/usr --with-freetype-dir=/usr --with-openssl --with-gettext=/usr --with-zlib=/usr --with-bz2=/usr --without-mysql --with-mysqli --enable-mysqlnd --with-pdo-mysql --with-apxs2=/usr/local/apache/bin/apxs
+  args:
+    chdir: "{{ php7.work_dir }}/{{ php7.file_name }}"
+    creates: "{{ php7.conf_file }}"
+    
+- name: make実行
+  shell: make && make install
+  args:
+    chdir: "{{ php7.work_dir }}/{{ php7.file_name }}"
+    creates: "{{ php7.conf_file }}"
+
