@@ -49,37 +49,14 @@
 #  when: zabbixDatabaseTebles|int == 0
 
 # Setting zabbix_server.conf
-- name: Setting zabbix_server.conf
-  lineinfile: >-
-    dest='/etc/zabbix/zabbix_server.conf'
-    regexp='{{ item.regexp }}'
-    insertafter='{{ item.insertafter }}'
-    line='{{ item.line }}'
-  with_items:
-    - regexp: '^ListenPort='
-      insertafter: "^# ListenPort="
-      line: 'ListenPort={{ ListenPort }}'
-    - regexp: '^LogFile='
-      insertafter: "^# LogFile="
-      line: 'LogFile={{ LogFile }}'
-    - regexp: '^DBHost='
-      insertafter: "^# DBHost="
-      line: 'DBHost={{ DBHost }}'
-    - regexp: '^DBName='
-      insertafter: "^# DBName="
-      line: 'DBName={{ DBName }}'
-    - regexp: '^DBUser='
-      insertafter: "^# DBUser="
-      line: 'DBUser={{ DBUser }}'
-    - regexp: '^DBPassword='
-      insertafter: "^# DBPassword="
-      line: 'DBPassword={{ DBPassword }}'
-    - regexp: '^DBPort='
-      insertafter: "^# DBPort="
-      line: 'DBPort={{ DBPort }}'
-    - regexp: '^DBSocket='
-      insertafter: "^# DBSocket="
-      line: 'DBSocket={{ DBSocket }}'
+- name: Put zabbix_server.conf
+  template:
+    src: zabbix_server.conf.j2
+    dest: /etc/zabbix/zabbix_server.conf
+    owner: root
+    group: zabbix
+    mode: 0644
+
 
 # Copy a new 'zabbix.conf.php' file into place
 - template: src=zabbix.conf.php.j2 dest=/etc/zabbix/web/zabbix.conf.php owner=apache group=apache mode=0644
