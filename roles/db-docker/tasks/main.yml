@@ -1,0 +1,44 @@
+---
+- name: Copy mariadb repo file.
+  copy:
+    src: ../files/MariaDB.repo
+    dest: /etc/yum.repos.d/MariaDB.repo
+
+- name: Install docker, mariadb-client
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - docker
+    - MariaDB-client
+    - MySQL-python
+
+- name: start docker
+  systemd:
+    name: docker
+    state: started
+
+- name: Docker container create and start
+::::::::::: todo :::::::::
+
+
+
+- name: Set root accounts password
+  mysql_user:
+    name: root
+    host: localhost
+    password: "{{ mysql_root_password }}"
+
+- name: Create database eccube
+  mysql_db:
+    name: eccube
+    state: present
+
+- name: Create Mysql user eccube, and give all permission.
+  mysql_user:
+    name: eccubeAdmin
+    password: "{{ eccube_db_password }}"
+    priv: "eccube.*:ALL"
+    host: "{{ eccube_allow_nw }}" 
+    state: present
+

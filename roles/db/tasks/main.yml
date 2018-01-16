@@ -1,0 +1,58 @@
+- name: Install epel-release
+  yum: name=epel-release state=latest
+
+- name: Install MariaDB
+  yum: 
+    name: mariadb,mariadb-server,MySQL-python
+    enablerepo : epel
+    state: present
+
+- name: Systemd MariaDB,MariaDB-server service start
+  systemd:
+    name: mariadb.service
+    enabled: yes
+    state: started
+
+- name: put my.cnf on remote(/etc/my.cnf)
+  copy:
+    src: ../files/my.cnf_all
+    dest: /etc/my.cnf
+    mode: 0644
+    owner: root
+    group: root
+
+- name: put my.cnf_20171201 on remote(/etc/my.cnf) //hint
+  copy:
+    src: ../files/my.cnf_all
+    dest: /etc/my.cnf_20171201
+    mode: 0644
+    owner: root
+    group: root
+
+- name: Set root accounts password
+  mysql_user:
+    name: root
+    host: localhost
+    password: "{{ mysql_root_password }}"
+
+- name: put my.cnf on remote
+  copy:
+    src: ../files/my.cnf
+    dest: /root/.my.cnf
+    mode: 0600
+    owner: root
+    group: root
+
+- name: Create database eccube
+  mysql_db:
+    name: eccube
+    state: present
+
+- name: Create Mysql user eccube, and give all permission.
+  mysql_user:
+    name: eccubeAdmin
+    password: "{{ eccube_db_password }}"
+    priv: "eccube.*:ALL"
+    host: "{{ eccube_allow_nw }}" 
+    state: present
+
