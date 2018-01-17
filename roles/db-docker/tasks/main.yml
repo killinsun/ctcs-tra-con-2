@@ -12,30 +12,39 @@
     - docker
     - MariaDB-client
     - MySQL-python
+    - python2-pip
 
 - name: start docker
   systemd:
     name: docker
     state: started
 
+- name: install docker-py
+  pip:
+    name: docker-py
+
 - name: Docker container create and start
-::::::::::: todo :::::::::
-
-
-
-- name: Set root accounts password
-  mysql_user:
-    name: root
-    host: localhost
-    password: "{{ mysql_root_password }}"
+  docker_container:
+    name: mysql
+    image: mysql:5.7.14
+    env: 
+        MYSQL_ROOT_PASSWORD: "{{ mysql_root_password }}"
+    ports:
+        - "3306:3306"
 
 - name: Create database eccube
   mysql_db:
     name: eccube
     state: present
+    login_host: 0.0.0.0
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
 
 - name: Create Mysql user eccube, and give all permission.
   mysql_user:
+    login_host: 0.0.0.0
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
     name: eccubeAdmin
     password: "{{ eccube_db_password }}"
     priv: "eccube.*:ALL"
