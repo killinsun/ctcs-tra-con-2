@@ -1,0 +1,42 @@
+---
+- name: Did already install vim
+  shell: test -e /usr/local/src/vim/configure
+  register: res
+  check_mode: no
+  failed_when: no
+  changed_when: res.rc != 0
+
+- name: Install C compiler and other related packages
+  yum:
+    name: gcc,ncurses-devel,git
+  when: res|changed
+
+- name: clone vim8 git repository.
+  git:
+    repo: 'https://github.com/vim/vim.git'
+    dest: /usr/local/src/vim
+  when: res|changed
+
+- shell: cd /usr/local/src/vim/ && ./configure
+  when: res|changed
+
+- shell: cd /usr/local/src/vim/ && make && make install
+  when: res|changed
+
+- yum:
+    name: vim
+    state: absent
+  when: res|changed
+
+- file:
+    src: /usr/local/bin/vim
+    dest: /bin/vim
+    state: link
+  when: res|changed
+
+- name: setup my settings.
+  git:
+    repo: 'https://github.com/killinsun/vimrc.git'
+    dest: /usr/local/src/vimrc
+
+- shell: cp /usr/local/src/vimrc/.vim* ~/ -R

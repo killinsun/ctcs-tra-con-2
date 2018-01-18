@@ -1,2 +1,69 @@
 ---
+# Download and install ZABBIX for Centos/RHEL version 7
+- name: Download ZABBIX Repo - Centos/RHEL 7
+  get_url: url={{ zabbixRepository }} dest=/tmp/zabbix.rpm
+  when: "ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7'"
 
+- name: Install ZABBIX Repo - Centos/RHEL 7
+  yum:
+    name: /tmp/zabbix.rpm
+    state: present
+  when: "ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7'"
+
+- name: get {{ zabbixRpmGpgKey }}
+  get_url: url={{ zabbixRpmGpgKey }} dest=/tmp/RPM-GPG-KEY-ZABBIX
+  when: "ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7'"
+
+- name: Import a key from a file
+  rpm_key: state=present key=/tmp/RPM-GPG-KEY-ZABBIX
+
+- name: Install zabbix-server
+  yum: name={{ item }} enablerepo=zabbix state=latest disable_gpg_check=no
+  with_items:
+    - zabbix-server-mysql
+    - zabbix-web-mysql
+    - zabbix-web-japanese
+#    - zabbix-get
+
+- name: disabled zabbix repository
+  lineinfile: dest=/etc/yum.repos.d/zabbix.repo regexp='^enabled' line="enabled=0"
+
+# Setting database
+- name: Create a new database
+  mysql_db: name={{ DBName }} state=present encoding=utf8 collation=utf8_bin
+
+- name: Create database user and 'WITH GRANT OPTION'
+  mysql_user: name={{ DBUser }} password={{ DBPassword }} priv={{ DBName }}.*:ALL,GRANT state=present
+
+- name: Importing schema file
+  shell: mysql -u{{ DBUser }} -p{{ DBPassword }} {{ DBName }} -e "show tables;" | wc -l
+  register: zabbixDatabaseTebles
+  changed_when: False
+
+#- shell: zcat /usr/share/doc/zabbix-server-mysql-*/create.sql.gz | mysql -u{{ DBUser }} -p{{ DBPassword }} {{ DBName }}
+#  when: zabbixDatabaseTebles|int == 0
+
+# Setting zabbix_server.conf
+- name: Put zabbix_server.conf
+  template:
+    src: zabbix_server.conf.j2
+    dest: /etc/zabbix/zabbix_server.conf
+    owner: root
+    group: zabbix
+    mode: 0644
+
+
+# Copy a new 'zabbix.conf.php' file into place
+- template: src=zabbix.conf.php.j2 dest=/etc/zabbix/web/zabbix.conf.php owner=apache group=apache mode=0644
+
+- name: start zabbix-server 
+  systemd:
+    name: zabbix-server
+    state: started
+    enabled: yes
+
+- name: restart httpd
+  systemd:
+    name: httpd
+    state: started
+    enabled: yes

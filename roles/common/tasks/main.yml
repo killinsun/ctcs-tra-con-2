@@ -1,2 +1,3 @@
 ---
-# tasks file for common
+- include: modify_to_common_settings.yml
+- include: install_zabbix-agent.yml

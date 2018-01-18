@@ -1,0 +1,51 @@
+---
+- name: Put profile on remote
+  copy: 
+    src: "../files/addProfile.txt"
+    dest: /home/centos/addProfile.txt
+    owner: centos 
+    group: wheel
+
+- name: create script log directory
+  file:
+    path: /var/log/script
+    state: directory
+    mode: 755
+
+- name: Set script command.
+  shell: "touch /etc/profile || cat ../files/addProfile.txt > /etc/profile"
+
+- name: add a new user
+  user: 
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+    group: "{{ item.group }}"
+    password: "{{ item.password }}"
+  with_items: 
+    - { "name":"{{MG_username}}", "state":"present", "group":"wheel", "password":"{{MG_password}}" }
+    - { "name":"{{tech_username}}", "state":"present", "group":"wheel", "password":"{{tech_password}}" }
+    - { "name":"{{OP_username}}", "state":"present", "group":"users", "password":"{{OP_password}}" }
+
+- name: mkdir .ssh
+  file: 
+    dest: "{{ item.dest }}/.ssh/" 
+    state: directory 
+    owner: "{{ item.owner }}"
+  with_items: 
+    - { "dest":"{{MG_homedir}}", "owner":"{{MG_username}}" }
+    - { "dest":"{{tech_homedir}}", "owner":"{{tech_username}}" }
+    - { "dest":"{{OP_homedir}}", "owner":"{{OP_username}}" }
+
+- name: copy a public key file to remote
+  copy: 
+    src:  "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner }}"
+    mode: 600
+  with_items:
+    - { "src":"../files/trashMG.pub", "dest":"{{MG_homedir}}/.ssh/authorized_keys", "owner": "{{MG_username}}" }
+    - { "src":"../files/tech-user.pub", "dest":"{{tech_homedir}}/.ssh/authorized_keys", "owner": "{{tech_username}}"}
+    - { "src":"../files/op-user.pub", "dest":"{{OP_homedir}}/.ssh/authorized_keys", "owner": "{{OP_username}}"}
+
+- name: Add SELinux permit rule.
+  shell: setenforce 0

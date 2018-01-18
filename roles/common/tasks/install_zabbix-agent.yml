@@ -1,0 +1,33 @@
+- name: Get ansible agent rpm file
+  get_url:
+    url: "{{ zabbix_agent.rpm_file_url }}"
+    dest: "/tmp/{{ zabbix_agent.rpm_file }}"
+
+- name: Install zabbix agent.
+  yum: 
+    name: "/tmp/{{ zabbix_agent.rpm_file }}"
+
+- name: Put zabbix_agentd.conf on remote from zabbix_agentd.conf.j2
+  template:
+    src: zabbix_agentd.conf.j2
+    dest: /etc/zabbix/zabbix_agentd.conf
+  nortify: Restart zabbix-agent
+
+- name: Add sudo authority for zabbix user
+  lineinfile:
+    dest: /etc/sudoers
+    backup: yes
+    line: 'zabbix ALL=(root) NOPASSWD: ALL'
+
+- name: not require tty on sudo
+  lineinfile:
+    dest: /etc/sudoers
+    backup: yes
+    line: 'Defaults:zabbix !requiretty'
+
+- name: Enable zabbix-agent service
+  systemd:
+    name: zabbix-agent
+    enabled: yes
+  nortify: Restart zabbix-agent
+

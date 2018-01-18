@@ -45,4 +45,5 @@
   args:
     chdir: "{{ php7.work_dir }}/{{ php7.file_name }}"
     creates: "{{ php7.conf_file }}"
+  nortice: restart httpd
 

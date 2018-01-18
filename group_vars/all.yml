@@ -1,0 +1,18 @@
+# Common Users.
+# paste password hash from /etc/passwd file
+MG_username: trashMG
+MG_homedir:  /home/{{MG_username}}
+MG_password: $6$eJmCZJ2H$kFmPuzArbHLAe5HW8E0GZUYp2u2WFbj2F24k4F2Jio.Sd9sjRtK3e9E3n/KtlBE2FJQK2i98yuvFBaZYom/cP.
+tech_username: tech-user
+tech_homedir: /home/{{tech_username}}
+tech_password: $6$sNF7gEMt$.Qich5.JGuUyhagTPxKKyNiMCtURGN27gFOIxn/jwGVu3c4oomT6D0tBnS4NGxxfdx3ARHGy99j5yF3HElPSe1
+OP_username: op-user
+OP_homedir: /home/{{OP_username}}
+OP_password: $6$XxRZN3k4$tt3rS/p9nq6.Nfs9nJ/6AngPgxyb/R/ieTVsm0XKPuESIsNkIB1ePOpNl0MZMgQ6q8hOm9A/63J0a9jM6Tx2Z0
+
+# Common application / middleware variables
+zabbix_agent:
+  agent_version: 3.4
+  server: 10.246.0.232
+  rpm_file: zabbix-agent-3.4.6-1.el7.x86_64.rpm
+  rpm_file_url: http://repo.zabbix.com/zabbix/3.4/rhel/7/x86_64/zabbix-agent-3.4.6-1.el7.x86_64.rpm

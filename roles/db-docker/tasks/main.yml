@@ -46,8 +46,8 @@
     login_user: root
     login_password: "{{ mysql_root_password }}"
     name: eccubeAdmin
+    host: "{{ db_access_allow_nw }}"
     password: "{{ eccube_db_password }}"
     priv: "eccube.*:ALL"
-    host: "{{ eccube_allow_nw }}" 
     state: present
 

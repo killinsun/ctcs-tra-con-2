@@ -1,7 +1,6 @@
 # webservers Variables
-
 apache_2_2:
-  file_name: httpd-2.2.19
+  file_name: httpd-2.2.21
   # 起動ユーザ
   user_name: apache
   # 起動グループ
@@ -9,15 +8,15 @@ apache_2_2:
   # ソースファイル作業ディレクトリ
   work_dir: /usr/local/src
   # ソースファイルダウンロード URL
-  url: https://archive.apache.org/dist/httpd/httpd-2.2.19.tar.gz
+  url: https://archive.apache.org/dist/httpd/httpd-2.2.21.tar.gz
   # ソースファイル名
-  src_filename: httpd-2.2.19.tar.gz
+  src_filename: httpd-2.2.21.tar.gz
   
   # 設定ファイルパス
-  conf_file: /usr/local/apache/conf//httpd.conf
+  conf_file: /usr/local/apache/conf/httpd.conf
 
 php7:
   file_name: php-7.0.0
   work_dir: /usr/local/src
   src_filename: php-7.0.0.tar.gz
-  conf_file: /usr/local/php/7.0.0/bin/php
+  conf_file: /etc/php.ini

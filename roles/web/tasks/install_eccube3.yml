@@ -24,7 +24,7 @@
     src: "../files/php.ini"
     dest: /etc/php.ini
 
-- name: set permission for /var/ww/html
+- name: set permission for /var/www/html
   file:
     dest: /var/www/
     recurse: yes
