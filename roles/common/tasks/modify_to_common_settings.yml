@@ -1,10 +1,4 @@
 ---
-- name: Put profile on remote
-  copy: 
-    src: "../files/addProfile.txt"
-    dest: /home/centos/addProfile.txt
-    owner: centos 
-    group: wheel
 
 - name: create script log directory
   file:
@@ -12,8 +6,11 @@
     state: directory
     mode: 755
 
-- name: Set script command.
-  shell: "touch /etc/profile || cat ../files/addProfile.txt > /etc/profile"
+- name: Put profile on remote
+  copy:
+    src: "../files/addProfile.txt"
+    dest: /etc/profile
+    force: yes
 
 - name: add a new user
   user: 
