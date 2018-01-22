@@ -1,0 +1,69 @@
+# Input
+#
+<source>
+	type tail
+	format syslog
+	path /var/log/secure
+	pos_file /var/log/td-agent/os.secure.log.post
+	tag os.secure
+</source>
+		
+
+{% for input in fluentd_input %}
+<source>
+	type {{ input.type }}
+	format {{ input.format }}
+	path {{ input.path }}
+	pos_file {{ input.posfile }}
+	tag {{ input.tag }}
+</source>
+
+{% endfor %}
+
+
+
+
+## Output
+<match os.secure>
+	type copy
+	<store>
+		type file
+		path /var/log/td-agent/os.secure
+		time_slice_format %Y%m%d
+	</store>
+	<store>
+		type forward
+		send_timeout 60s
+		recover_wailt 20s
+		heartbeat_interval 8s
+		<server>
+			name fluentd.killinsun.com
+			host 192.168.22.32
+			port 8888
+		</server>
+	</store>
+</match>
+
+{% for output in fluentd_output %}
+
+<match {{ output.match_tag }}>
+	type copy
+	<store>
+		type file
+		path {{ output.match_path }}
+		time_slice_format %Y%m%d
+	</store>
+	<store>
+		type forward
+		send_timeout 60s
+		recover_wait 20s
+		heartbeat_interval 8s
+		<server>
+				name fluentd.killinsun.com
+				host 192.168.22.32
+				port 8888
+		</server>
+	</store>
+</match>
+
+{% endfor %}

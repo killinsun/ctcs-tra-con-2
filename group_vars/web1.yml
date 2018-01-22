@@ -1,5 +1,6 @@
 # webservers Variables
 
+
 apache_2_2:
   file_name: httpd-2.2.19
   # 起動ユーザ

@@ -1,0 +1,87 @@
+---
+- name: Install packages
+  yum: 
+    name: {{ items }}
+  with_items:
+    - chrony
+    - ruby
+    - ruby-devel
+    - rubygems
+
+- lineinfile:
+    path: /etc/chrony.conf
+    regexp: '^server ntp.nict.jp iburst'
+    line: 'server ntp.nict.jp iburst'
+
+- name: Restart chronyd
+  systemd: 
+    name: chronyd
+    state: restarted
+
+- name: change timezone
+  timezone:
+    name: Asia/Tokyo
+
+- name: change systemctl.conf
+  sysctl:
+    name: net.ipv4.tcp_tw_recycle
+    value: 1
+
+- sysctl:
+    name: net.ipv4.tcp_tw_recycle
+    value: 1
+
+- sysctl:
+    name: net.ipv4.ip_local_port_range
+    value: 1024 65535
+
+- name: Did already install td-agent
+  shell: test -e /etc/td-agent/td-agent.conf
+  register: res
+  check_mode: no
+  failed_when: no
+  changed_when: res.rc != 0
+
+- name: Install td-agent
+  shell: curl -L https{{ colon }}//toolbelt.treasuredata.com/sh/install-redhat-td-agent2.sh | sh 
+  when: res|changed
+
+- name: Put td-agent conf slave servers
+  template:
+    src: td-agent.conf.j2
+    dest: /etc/td-agent/td-agent.conf
+  when: ansible_hostname != "manager"
+
+- name: Change specify log files group owner.
+  file:
+    dest: "{{ item.path }}"
+    mode: 740
+    group: root
+  with_items: "{{ fluentd_input }}"
+  when: ansible_hostname != "manager"
+
+- name: Put td-agent conf master server
+  copy:
+    src: ../files/td-agent.conf
+    dest: /etc/td-agent/td-agent.conf
+    backup: yes
+  when: ansible_hostname == "manager"
+
+- name: Change joins group for td-agent user 
+  user:
+    name: td-agent
+    groups: root
+
+- name: Change secure log file's group owner.
+  file:
+    dest: /var/log/secure
+    mode: 740
+    owner: root
+    group: root
+
+- name: Restart td-agent daemon.
+  systemd:
+    name: td-agent
+    state: restarted
+
+

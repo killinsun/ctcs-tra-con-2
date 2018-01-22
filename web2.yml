@@ -8,3 +8,4 @@
     - common
     - web
     - db-docker
+    #- fluentd
