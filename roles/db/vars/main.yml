@@ -1,4 +1,0 @@
-username: trashMG
-mysql_root_password: ctcs-tra-con
-eccube_db_password: ctcs-tra-con
-eccube_allow_nw: 10.246.0.%

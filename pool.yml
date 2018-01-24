@@ -1,7 +1,7 @@
 ---
 
 - name: install and configure the db
-  hosts: db
+  hosts: pool
   remote_user: centos
   become: yes
 

@@ -2,4 +2,4 @@
 - include: web1.yml
 - include: web2.yml
 - include: db.yml
-- include: manager.yml
+#- include: manager.yml

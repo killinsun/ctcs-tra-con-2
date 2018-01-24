@@ -1,6 +1,6 @@
 ---
 - name: install and configure the web
-  hosts: web2
+  hosts: chaozu
   remote_user: centos
   become: yes
 

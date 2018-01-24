@@ -1,0 +1,11 @@
+[yamcha]
+10.246.0.202
+
+[chaozu]
+10.246.0.223
+
+[pool]
+10.246.0.225
+
+[all:vars]
+team=team1

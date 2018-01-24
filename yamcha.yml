@@ -1,10 +1,10 @@
 ---
 
 - name: install and configure the web
-  hosts: web1
+  hosts: yamcha
   remote_user: centos
   become: yes
   roles:
     - common
     - web
-   # - fluentd
+    - fluentd

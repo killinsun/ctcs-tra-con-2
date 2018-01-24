@@ -1,5 +1,9 @@
 ---
 
+- name: change hostname
+  hostname:
+    name: "{{team}}_{{var_hostname}}"
+
 - name: create script log directory
   file:
     path: /var/log/script

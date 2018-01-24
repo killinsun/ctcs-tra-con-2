@@ -1,7 +1,7 @@
 ---
 - name: Install packages
   yum: 
-    name: {{ items }}
+    name: "{{ item }}"
   with_items:
     - chrony
     - ruby

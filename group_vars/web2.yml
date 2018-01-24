@@ -1,5 +1,7 @@
-
 # webservers Variables
+
+var_hostname: chaozu2
+
 apache_2_2:
   file_name: httpd-2.2.21
   # 起動ユーザ

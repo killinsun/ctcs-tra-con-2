@@ -10,19 +10,17 @@ OP_username: op-user
 OP_homedir: /home/{{OP_username}}
 OP_password: $6$XxRZN3k4$tt3rS/p9nq6.Nfs9nJ/6AngPgxyb/R/ieTVsm0XKPuESIsNkIB1ePOpNl0MZMgQ6q8hOm9A/63J0a9jM6Tx2Z0
 
-fluentd-server : localhost
-zabbix-server : localhost
-fluentd-port : 24224
+fluentd-server : manager
+zabbix-server : manager
 colon : ':'
 
 
 fluentd_input:
-- { type: "tail_ex", path: "/var/log/script/centos_%Y%m&d%H%M%s.log", format: "none", posfile: "/var/log/td-agent/team.script.centos.log.post", tag: "team.script.centos.log.post" }
-#- { type: "tail", path: "/var/log/script/op-user_", format: "none", posfile: "/var/log/td-agent/team.script.op-user.log.post", tag: "team.script.op-user.log.post" }
+- { type: "tail", path: "/var/log/script/centos.log", format: "none", posfile: "/var/log/td-agent/team.script.centos.log.post", tag: "team.script.centos" }
 
 fluentd_output:
 - { match_tag: "team.script.centos.*", match_path: "/var/log/td-agent/team.script.centos" } 
-- { match_tag: "team.script.op-user.*", match_path: "/var/log/td-agent/team.script.op-user" } 
+#- { match_tag: "team.script.op-user.*", match_path: "/var/log/td-agent/team.script.op-user" } 
 
 # Common application / middleware variables
 zabbix_agent:
