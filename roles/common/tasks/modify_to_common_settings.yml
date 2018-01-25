@@ -8,7 +8,21 @@
   file:
     path: /var/log/script
     state: directory
-    mode: 755
+    mode: 0774
+    group: wheel
+
+- name: touch script log file
+  file:
+    path: "/var/log/script/{{ item }}.log"
+    state: touch 
+    mode: 0774
+    owner: "{{ item }}"
+    group: wheel
+  with_items:
+    - "{{ MG_username }}"
+    - "{{ tech_username }}"
+    - "{{ OP_username }}"
+    - centos
 
 - name: Put profile on remote
   copy:

@@ -1,5 +1,5 @@
 ---
-- include: web1.yml
-- include: web2.yml
-- include: db.yml
+- include: yamcha.yml
+- include: chaozu.yml
+- include: pool.yml
 #- include: manager.yml

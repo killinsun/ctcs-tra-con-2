@@ -11,6 +11,7 @@
   template:
     src: zabbix_agentd.conf.j2
     dest: /etc/zabbix/zabbix_agentd.conf
+    force: yes
   nortify: Restart zabbix-agent
 
 - name: Add sudo authority for zabbix user
@@ -25,9 +26,15 @@
     backup: yes
     line: 'Defaults:zabbix !requiretty'
 
+- name: zabbix user joins wheel group
+  user:
+    name: zabbix
+    group: zabbix
+    groups: wheel
+
 - name: Enable zabbix-agent service
   systemd:
     name: zabbix-agent
     enabled: yes
-  nortify: Restart zabbix-agent
+  notify: Restart zabbix-agent
 
