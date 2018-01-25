@@ -80,5 +80,6 @@ unset -f pathmunge
 P_PROC=`ps aux | grep $PPID | grep sshd | awk '{ print $11 }'`
 if [ "$P_PROC" = sshd: ]; then
   script -aqf /var/log/script/`whoami`.log
+  chmod 774 /var/log/script/`whoami`.log
   exit
 fi

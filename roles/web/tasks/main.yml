@@ -5,4 +5,5 @@
 - include: install_httpd_2_2.yml
 - include: install_php.yml
 - include: install_eccube3.yml
+- include: install_nginx.yml
 # tasks file for web

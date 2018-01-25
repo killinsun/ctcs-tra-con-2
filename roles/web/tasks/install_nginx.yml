@@ -1,0 +1,17 @@
+---
+
+- name: Install nginx from yum
+  yum:
+    name: nginx
+
+- name: systemd enable nginx
+  systemd:
+    name: nginx
+    state: stopped
+    enabled: yes
+
+- name: systemd disable httpd
+  systemd:
+    name: httpd
+    state: started
+    enabled: no

@@ -36,5 +36,5 @@
   systemd:
     name: zabbix-agent
     enabled: yes
-  notify: Restart zabbix-agent
+  notify: restart zabbix-agent
 
