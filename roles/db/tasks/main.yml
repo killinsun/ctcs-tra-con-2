@@ -33,7 +33,8 @@
   mysql_user:
     name: root
     host: localhost
-    password: "{{ mysql_root_password }}"
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
 
 - name: put my.cnf on remote
   copy:
@@ -47,6 +48,8 @@
   mysql_db:
     name: eccube
     state: present
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
 
 - name: Create Mysql user eccube, and give all permission.
   mysql_user:
@@ -55,4 +58,6 @@
     priv: "eccube.*:ALL"
     host: "{{ eccube_allow_nw }}" 
     state: present
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
 

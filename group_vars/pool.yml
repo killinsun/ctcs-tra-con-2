@@ -1,5 +1,5 @@
 
-var_hostname: yamcha
+var_hostname: pool
 
 #mysql settings
 username: trashMG

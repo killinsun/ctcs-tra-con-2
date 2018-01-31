@@ -11,19 +11,6 @@
     mode: 0774
     group: wheel
 
-- name: touch script log file
-  file:
-    path: "/var/log/script/{{ item }}.log"
-    state: touch 
-    mode: 0774
-    owner: "{{ item }}"
-    group: wheel
-  with_items:
-    - "{{ MG_username }}"
-    - "{{ tech_username }}"
-    - "{{ OP_username }}"
-    - centos
-
 - name: Put profile on remote
   copy:
     src: "../files/addProfile.txt"
@@ -56,11 +43,24 @@
     src:  "{{ item.src }}"
     dest: "{{ item.dest }}"
     owner: "{{ item.owner }}"
-    mode: 600
+    mode: 0600
   with_items:
     - { "src":"../files/trashMG.pub", "dest":"{{MG_homedir}}/.ssh/authorized_keys", "owner": "{{MG_username}}" }
     - { "src":"../files/tech-user.pub", "dest":"{{tech_homedir}}/.ssh/authorized_keys", "owner": "{{tech_username}}"}
     - { "src":"../files/op-user.pub", "dest":"{{OP_homedir}}/.ssh/authorized_keys", "owner": "{{OP_username}}"}
+- name: touch script log file
+  file:
+    path: "/var/log/script/{{ item }}.log"
+    state: touch 
+    mode: 0774
+    owner: "{{ item }}"
+    group: wheel
+  with_items:
+    - "{{ MG_username }}"
+    - "{{ tech_username }}"
+    - "{{ OP_username }}"
+    - centos
+
 
 - name: Add SELinux permit rule.
   shell: setenforce 0

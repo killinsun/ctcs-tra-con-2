@@ -2,6 +2,12 @@
 
 var_hostname: chaozu2
 
+#mysql on docker settings
+username: trashMG
+mysql_root_password: ctcs-tra-con
+eccube_db_password: ctcs-tra-con
+eccube_allow_nw: 10.246.0.%
+
 apache_2_2:
   file_name: httpd-2.2.21
   # 起動ユーザ
